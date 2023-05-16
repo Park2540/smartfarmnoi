@@ -1,12 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { AppRegistry } from 'react-native';
 import { cartContext } from './tab-cart-context'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 
 import Maincontrol from './control/maincontrol'
 
@@ -32,7 +30,42 @@ import SetDurian1 from './setting/SetDurian1'
 import SetDurian2 from './setting/setDurian2'
 import SetDurian3 from './setting/setDurian3'
 
+// import {PermissionsAndroid,Alert} from 'react-native';
+// PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+// import messaging from '@react-native-firebase/messaging';
+
+
+
+  
+
 export default function App() {
+
+	// useEffect(() => {
+	// 	const unsubscribe = messaging().onMessage(async remoteMessage => {
+	// 	  Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+	// 	});
+	
+	// 	return unsubscribe;
+	//   }, []);
+	// async function requestUserPermission() {
+	// 	const authStatus = await messaging().requestPermission();
+	// 	const enabled =
+	// 	  authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+	// 	  authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+	  
+	// 	if (enabled) {
+	// 	  console.log('Authorization status:', authStatus);
+	// 	}
+	//   }
+
+	//   useEffect(() => {
+	// 	const unsubscribe = messaging().onMessage(async remoteMessage => {
+	// 	  Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+	// 	});
+	
+	// 	return unsubscribe;
+	//   }, []);
+	
   const MainControl = () => {
 		const Control = createStackNavigator()
 		return (

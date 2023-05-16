@@ -171,7 +171,7 @@ useEffect(() => {
       <View style={globalStyles.container}>
         <TouchableHighlight style={SettingStyles.items3}>
           <View>
-            <View style={SettingStyles.container1}>
+            {/* <View style={SettingStyles.container1}>
               <Switch
                 trackColor={{ false: "#767577", true: "#00BE00" }}
                 thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
@@ -179,7 +179,7 @@ useEffect(() => {
                 onValueChange={toggleSwitch}
                 value={isEnabled}
               />
-            </View>
+            </View> */}
             <View>
               <Image
                 source={require("../src/alarm-clock.png")}

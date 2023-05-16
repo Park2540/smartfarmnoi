@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { View, StyleSheet, Alert, Text, Image,Switch,TouchableHighlight, TouchableOpacity, Button } from 'react-native'
 import { color } from 'react-native-reanimated'
 import { ImageBackground } from 'react-native';
 import dayjs from 'dayjs'
+
 import globalStyles from '../global-styles'
 import SettingStyles from '../Setting-Styles'
-
+import {getDatabase,ref,set,update,onValue,remove,child,get} from "firebase/database";
+import database from '@react-native-firebase/database';
 export default function Maincontrol({ navigation }) {
     const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
@@ -21,6 +23,11 @@ export default function Maincontrol({ navigation }) {
 
   const [isEnabled4, setIsEnabled4] = useState(false);
   const toggleSwitch4 = () => setIsEnabled4((previousState) => !previousState);
+
+
+  
+
+  
 
   	//dayjs.extend(LocalizedFormat);
     var date_str = dayjs('2000-01-01').format('h:mm:ss A');
@@ -50,13 +57,14 @@ export default function Maincontrol({ navigation }) {
 				<View style={styles.viewImgTextContainer}>
 					<Text style={styles.buttonText}>ควบคุมการทำงานทุเรียนโซน 1</Text>
 					<View style={styles.container1}>
-      					<Switch
+      					{/* <Switch
         					trackColor={{ false: "#767577", true: "#00BE00" }}
         					thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
         					ios_backgroundColor="#3e3e3e"
         					onValueChange={toggleSwitch}
         					value={isEnabled}
-      					/>
+      					/> */}
+						{/* <Text> {test1}</Text> */}
     				</View>
 				</View>
 			</TouchableHighlight>
