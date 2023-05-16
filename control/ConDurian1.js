@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { View, StyleSheet, Alert, Text, Image,TouchableHighlight, TouchableOpacity,ScrollView, } from 'react-native'
 import { color } from 'react-native-reanimated'
 import { ImageBackground } from 'react-native';
@@ -37,70 +37,66 @@ export default function ConDurian1({ route, navigation }){
 
   
 //   ตรวจสอบค่าเซนเซอร์
-  setInterval(() => {
-    get(child(dbRef, `Node1/Sensor${username}`))
-  .then((snapshot) => {
-    if (snapshot.exists()) {
-    //    console.log(snapshot.val());
-      var test = snapshot.val();
-      setTest1(test["AirTemperature"]);
-      setTest2(test["Humidity"]);
-      setTest3(test["Light"]);
-      setTest4(test["Moisture"]);
-      setTest5(test["SoilTemperature"]);
-
-    }
-    else {
-    //   console.log("No data available");
-    }
-  })
-  .catch((error) => {
-    //console.error(error);
-  })
-  return () => clearInterval(setInterval);
-}, 100);
-
-
-
-// ตรวจสอบค่าmode
-setInterval(() => {
-    get(child(dbRef, `Node1/Zone1${username}`))
-  .then((snapshot) => {
-    if (snapshot.exists()) {
-    //    console.log(snapshot.val());
-      var test = snapshot.val();
-      setMode1(test["Mode"]);
-
-    }
-    else {
-    //   console.log("No data available");
-    }
-  })
-  .catch((error) => {
-    //console.error(error);
-  })
-  return () => clearInterval(setInterval);
-}, 100);
-
-// ตรวจสอบสถานะการทำงาน
-setInterval(() => {
-    get(child(dbRef, `Node1/Valve${username}`))
-  .then((snapshot) => {
-    if (snapshot.exists()) {
-    //    console.log(snapshot.val());
-      var test = snapshot.val();
-      setValve(test["Valve"]);
-
-    }
-    else {
-    //   console.log("No data available");
-    }
-  })
-  .catch((error) => {
-    //console.error(error);
-  })
-  return () => clearInterval(setInterval);
-}, 100);
+useEffect(() => {
+	const fetchData = async () => {
+	  try {
+		const snapshot = await get(child(dbRef, `Node1/Sensor${username}`));
+		if (snapshot.exists()) {
+		  const test = snapshot.val();
+		  setTest1(test["AirTemperature"]);
+		  setTest2(test["Humidity"]);
+		  setTest3(test["Light"]);
+		  setTest4(test["Moisture"]);
+		  setTest5(test["SoilTemperature"]);
+		}
+	  } catch (error) {
+		console.error(error);
+	  }
+	};
+  
+	const interval = setInterval(fetchData, 10);
+  
+	return () => clearInterval(interval);
+  }, []);
+  
+  // ตรวจสอบค่า mode
+  useEffect(() => {
+	const fetchMode = async () => {
+	  try {
+		const snapshot = await get(child(dbRef, `Node1/Zone1${username}`));
+		if (snapshot.exists()) {
+		  const test = snapshot.val();
+		  setMode1(test["Mode"]);
+		}
+	  } catch (error) {
+		console.error(error);
+	  }
+	};
+  
+	const interval = setInterval(fetchMode, 10);
+  
+	return () => clearInterval(interval);
+  }, []);
+  
+  // ตรวจสอบสถานะการทำงาน
+  useEffect(() => {
+	const fetchValve = async () => {
+	  try {
+		const snapshot = await get(child(dbRef, `Node1/Valve${username}`));
+		if (snapshot.exists()) {
+		  const test = snapshot.val();
+		  setValve(test["Valve"]);
+		}
+	  } catch (error) {
+		console.error(error);
+	  }
+	};
+  
+	const interval = setInterval(fetchValve, 10);
+  
+	return () => clearInterval(interval);
+  }, []);
+  
 // function readData() {
 //     const starCountRef = ref(db, "users/" + username);
 //     onValue(starCountRef, (snapshot) => {
@@ -108,12 +104,12 @@ setInterval(() => {
 //       setEmail(data.email);
 //     });
 //   }
-  const [refreshing,setRefreshing] =useState(false);
-const onRefresh = () => {
-  setRefreshing(true);
-  wait(100).then(()=>
-  setRefreshing(false));
-}
+// const [refreshing,setRefreshing] =useState(false);
+// const onRefresh = () => {
+//   setRefreshing(true);
+//   wait(100).then(()=>
+//   setRefreshing(false));
+// }
 
     return (
 		

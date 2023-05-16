@@ -1,11 +1,11 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { View, StyleSheet, Alert, Text, Image,TouchableHighlight, TouchableOpacity,ScrollView, } from 'react-native'
 import { color } from 'react-native-reanimated'
 import { ImageBackground } from 'react-native';
 import globalStyles from '../global-styles'
 import ConStyles from '../Con-Style'
 import axios from "axios";
-import { sendValueToFirebase2, database } from '../firebase/firbase';
+import { sendValueToFirebase1, database } from '../firebase/firbase';
 // import firbase from '../firebase/firbase'
 import {getDatabase,ref,set,update,onValue,remove,child,get} from "firebase/database";
 // import database from '@react-native-firebase/database';
@@ -35,80 +35,72 @@ export default function ConDurian2({ route, navigation }){
 	// ตรวจสอบสถานะการทำงาน
   const [Valve,setTest7]= useState("");
   
-  clearInterval(setInterval);
+  
 //   ตรวจสอบค่าเซนเซอร์
-  setInterval(() => {
-    get(child(dbRef, `Node2/Sensor${username}`))
-  .then((snapshot) => {
-    if (snapshot.exists()) {
-    //    console.log(snapshot.val());
-      var test = snapshot.val();
-      setTest1(test["AirTemperature"]);
-      setTest2(test["Humidity"]);
-      setTest3(test["Light"]);
-      setTest4(test["Moisture"]);
-      setTest5(test["SoilTemperature"]);
-
-    }
-    else {
-    //   console.log("No data available");
-    }
-  })
-  .catch((error) => {
-    //console.error(error);
-  })
-
-}, 100);
-clearInterval(setInterval);
-
-
-// ตรวจสอบค่าmode
-setInterval(() => {
-    get(child(dbRef, `Node2/Zone1${username}`))
-  .then((snapshot) => {
-    if (snapshot.exists()) {
-    //    console.log(snapshot.val());
-      var test = snapshot.val();
-      setTest6(test["Mode"]);
-
-    }
-    else {
-    //   console.log("No data available");
-    }
-  })
-  .catch((error) => {
-    //console.error(error);
-  })
-
-}, 100);
-clearInterval(setInterval);
-
-// ตรวจสอบสถานะการทำงาน
-setInterval(() => {
-    get(child(dbRef, `Node2/Valve${username}`))
-  .then((snapshot) => {
-    if (snapshot.exists()) {
-    //    console.log(snapshot.val());
-      var test = snapshot.val();
-      setTest7(test["Valve"]);
-
-    }
-    else {
-    //   console.log("No data available");
-    }
-  })
-  .catch((error) => {
-    //console.error(error);
-  })
-
-}, 100);
-function readData() {
-    const starCountRef = ref(db, "users/" + username);
-    onValue(starCountRef, (snapshot) => {
-    //   const data = snapshot.val();
-      setEmail(data.email);
-    });
-  }
+const updateDataFromFirebase = () => {
+	// ตรวจสอบและอัปเดตค่า Sensor
+	get(child(dbRef, `Node1/Sensor${username}`))
+	  .then((snapshot) => {
+		if (snapshot.exists()) {
+		  var test = snapshot.val();
+		  setTest1(test["AirTemperature"]);
+		  setTest2(test["Humidity"]);
+		  setTest3(test["Light"]);
+		  setTest4(test["Moisture"]);
+		  setTest5(test["SoilTemperature"]);
+		} else {
+		  // console.log("No data available");
+		}
+	  })
+	  .catch((error) => {
+		// console.error(error);
+	  });
+  
+	// ตรวจสอบและอัปเดตค่า Mode
+	get(child(dbRef, `Node1/Zone2${username}`))
+	  .then((snapshot) => {
+		if (snapshot.exists()) {
+		  var test = snapshot.val();
+		  setTest6(test["Mode"]);
+		} else {
+		  // console.log("No data available");
+		}
+	  })
+	  .catch((error) => {
+		// console.error(error);
+	  });
+  
+	// ตรวจสอบและอัปเดตค่า Valve
+	get(child(dbRef, `Node1/Valve${username}`))
+	  .then((snapshot) => {
+		if (snapshot.exists()) {
+		  var test = snapshot.val();
+		  setTest7(test["Valve"]);
+		} else {
+		  // console.log("No data available");
+		}
+	  })
+	  .catch((error) => {
+		// console.error(error);
+	  });
+  };
+  
+  // ใช้ useEffect เพื่อเรียกใช้ฟังก์ชัน updateDataFromFirebase ทุก 100 milliseconds
+  useEffect(() => {
+	const interval = setInterval(updateDataFromFirebase, 100);
+  
+	return () => {
+	  clearInterval(interval);
+	};
+  }, []);
+  
+// function readData() {
+//     const starCountRef = ref(db, "users/" + username);
+//     onValue(starCountRef, (snapshot) => {
+//     //   const data = snapshot.val();
+//       setEmail(data.email);
+//     });
+//   }
   const [refreshing,setRefreshing] =useState(false);
 const onRefresh = () => {
   setRefreshing(true);
@@ -141,8 +133,8 @@ const onRefresh = () => {
   style={[styles.button, { backgroundColor: `${bgColor}` }]}
   onPress={async () => {
     try {
-      const value = isTorchOn ? 'Zone_1_OFF' : 'Zone_1_ON';
-      await sendValueToFirebase2(value);
+      const value = isTorchOn ? 'Zone_2_OFF' : 'Zone_2_ON';
+      await sendValueToFirebase1(value);
       setBgColor(isTorchOn ? '#cc0033' : '#00cc33');
       setIsTorchOn(!isTorchOn);
     } catch (error) {

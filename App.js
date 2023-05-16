@@ -30,42 +30,33 @@ import SetDurian1 from './setting/SetDurian1'
 import SetDurian2 from './setting/setDurian2'
 import SetDurian3 from './setting/setDurian3'
 
-// import {PermissionsAndroid,Alert} from 'react-native';
-// PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-// import messaging from '@react-native-firebase/messaging';
-
-
-
-  
+import {PermissionsAndroid,Alert} from 'react-native';
+PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+import messaging from '@react-native-firebase/messaging';
 
 export default function App() {
 
 	// useEffect(() => {
-	// 	const unsubscribe = messaging().onMessage(async remoteMessage => {
-	// 	  Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-	// 	});
-	
-	// 	return unsubscribe;
-	//   }, []);
-	// async function requestUserPermission() {
-	// 	const authStatus = await messaging().requestPermission();
-	// 	const enabled =
-	// 	  authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-	// 	  authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+	// 	const requestUserPermission = async () => {
+	// 	  const authStatus = await messaging().requestPermission();
+	// 	  const enabled =
+	// 		authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+	// 		authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 	  
-	// 	if (enabled) {
-	// 	  console.log('Authorization status:', authStatus);
-	// 	}
-	//   }
-
-	//   useEffect(() => {
+	// 	  if (enabled) {
+	// 		console.log('Authorization status:', authStatus);
+	// 	  }
+	// 	};
+	  
 	// 	const unsubscribe = messaging().onMessage(async remoteMessage => {
 	// 	  Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
 	// 	});
-	
+	  
+	// 	requestUserPermission();
+	  
 	// 	return unsubscribe;
 	//   }, []);
-	
+	  
   const MainControl = () => {
 		const Control = createStackNavigator()
 		return (

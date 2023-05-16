@@ -8,6 +8,8 @@ import globalStyles from '../global-styles'
 import SettingStyles from '../Setting-Styles'
 import {getDatabase,ref,set,update,onValue,remove,child,get} from "firebase/database";
 import database from '@react-native-firebase/database';
+
+
 export default function Maincontrol({ navigation }) {
     const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);

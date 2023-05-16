@@ -13,34 +13,18 @@ import dayjs from "dayjs";
 import { ImageBackground } from 'react-native';
 import globalStyles from "../global-styles";
 import SettingStyles from "../Setting-Styles";
-
+import DateTimePicker from '@react-native-community/datetimepicker';
 // import { fonts } from "react-native-elements/dist/config";
 import { sendValueToFirebase, } from '../firebase/firbase';
 
 export default function Timemode1({ route, navigation }) {
 
-
-  // const MyComponent = () => {
-  //   const [time1, setTime1] = useState('');
-  //     const [time2, setTime2] = useState('')}
-
-//   const [number, onChangeNumber] = React.useState(null);
-//   const [number1, onChangeNumber1] = React.useState(null);
-//   const [number2, onChangeNumber2] = React.useState(null);
-//   const [number3, onChangeNumber3] = React.useState(null);
-//   const [number4, onChangeNumber4] = React.useState(null);
-//   const [number5, onChangeNumber5] = React.useState(null);
-// // กำหนดตัวแปรสำหรับนำเข้าเวลา
-//   const [modalVisible, setModalVisible] = useState(false);
-//   const [startTime, setStartTime] = useState(null);
-//   const [endTime, setEndTime] = useState(null);
-  
   //การทำงานของสวิช
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
-  const [isEnabled1, setIsEnabled1] = useState(false);
-  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
+  // const [isEnabled1, setIsEnabled1] = useState(false);
+  // const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
 
   const [isEnabled2, setIsEnabled2] = useState(false);
   const toggleSwitch2 = () => setIsEnabled2((previousState) => !previousState);
@@ -48,6 +32,22 @@ export default function Timemode1({ route, navigation }) {
   const [isEnabled3, setIsEnabled3] = useState(false);
   const toggleSwitch3 = () => setIsEnabled3((previousState) => !previousState);
   const onPressHandler = () => {}
+
+
+  const toggleSwitch1 = (value) => {
+    const status = value ? "true" : "false";
+    setStatus11_1(value);
+
+    // Update the switch status in Firebase Realtime Database
+    set(ref(dbRef, `Node1/Zone1/ModeTime/1${username}/Status11_1`), status)
+      .then(() => {
+        console.log("Switch status updated successfully");
+      })
+      .catch((error) => {
+        console.error("Error updating switch status:", error);
+      });
+  };
+  
 // ส่วนการแสดงข้อมูล
   const dbRef = ref(getDatabase());
   const database = getDatabase();
@@ -56,7 +56,7 @@ export default function Timemode1({ route, navigation }) {
   const [on1, seton1] = useState("");
   const [off1, setoff1] = useState("");
   const [day1, setday1] = useState("");
-  const [Status1, setStatus1] = useState("");
+  const [Status11_1, setStatus11_1] = useState(false);
   const [on2, seton2] = useState("");
   const [off2, setoff2] = useState("");
   const [day2, setday2] = useState("");
@@ -67,21 +67,39 @@ export default function Timemode1({ route, navigation }) {
 // ส่วนของการดึงข้อมูลจากตัวแปรต่างๆ
 useEffect(() => {
   // ดึงข้อมูล ModeTime จากฐานข้อมูล
-  get(child(dbRef, `Node1/Zone1/ModeTime/1${username}`)).then((snapshot) => {
+  const modeTimeRef3 = child(dbRef, `Node1/Zone1/ModeTime/1${username}/Status11_1`);
+  const unsubscribe3 = onValue(modeTimeRef3, (snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const status = snapshot.val();
+        setStatus11_1(status === "true");
+    } else {
+      console.log("No data available");
+    }
+  },(error) => {
+    console.error(error);
+  },
+  
+  );
+
+  const modeTimeRef1 = child(dbRef, `Node1/Zone1/ModeTime/1${username}`);
+  const unsubscribe1 = onValue(modeTimeRef1, (snapshot) => {
     if (snapshot.exists()) {
       const data = snapshot.val();
       seton1(data["Time11_1"]);
       setoff1(data["Time11_2"]);
       setday1(data["Day11_1"]);
-      setStatus1(data["Status11_1"]);
     } else {
       console.log("No data available");
     }
-  }).catch((error) => {
+  }, (error) => {
     console.error(error);
-  });
+  },
+  
+  );
 
-  get(child(dbRef, `Node1/Zone1/ModeTime/2${username}`)).then((snapshot) => {
+const modeTimeRef2 = child(dbRef, `Node1/Zone1/ModeTime/2${username}`);
+  const unsubscribe2 = onValue(modeTimeRef2, (snapshot) => {
     if (snapshot.exists()) {
       const data = snapshot.val();
       seton2(data["Time11_3"]);
@@ -91,27 +109,24 @@ useEffect(() => {
     } else {
       console.log("No data available");
     }
-  }).catch((error) => {
+  }, (error) => {
     console.error(error);
   });
+
+  return () => {
+    // ยกเลิกการติดตามเมื่อคอมโพเนนต์ถูกทำลาย
+    off(modeTimeRef1, 'value', unsubscribe1);
+    off(modeTimeRef2, 'value', unsubscribe2);
+    off(modeTimeRef3, 'value', unsubscribe3);
+  };
 }, []);
 
 
-// const [showModal, setShowModal] = useState(false);
-//   const [Time1, setTime1] = useState(new Date());
-//   const [Time2, setTime2] = useState(new Date());
-
-  // function onChangeTime1(event, selectedTime) {
-  //   const currentTime = selectedTime || Time1;
+  // function onChangeTime2(event, selectedTime) {
+  //   const currentTime = selectedTime || Time2;
   //   setShowModal(Platform.OS === 'ios');
-  //   setTime1(currentTime);
+  //   setTime2(currentTime);
   // }
-
-  function onChangeTime2(event, selectedTime) {
-    const currentTime = selectedTime || Time2;
-    setShowModal(Platform.OS === 'ios');
-    setTime2(currentTime);
-  }
 
   // const [selectedDay, setSelectedDay] = useState('Sunday');
   const [showModaltime1, setShowModaltime1] = useState(false);
@@ -159,8 +174,23 @@ useEffect(() => {
       alert(error);
     });
   }
-  // const[showModal,setShowModal]=useState(false)
-  
+//  
+
+const TimePicker = () => {
+  const [time, setTime] = useState(new Date());
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const handleTimeChange = (event, selectedTime) => {
+    if (selectedTime) {
+      setTime(selectedTime);
+    }
+    setShowTimePicker(Platform.OS === 'ios');
+  };
+
+  const showPicker = () => {
+    setShowTimePicker(true);
+  };
+}
   return (
         <ImageBackground
       		source={require('../assets/background50.png')}
@@ -213,11 +243,12 @@ useEffect(() => {
             <View style={SettingStyles.container2}>
             <Switch
               trackColor={{ false: "#767577", true: "#00BE00" }}
-              thumbColor={isEnabled1 ? "#f5dd4b" : "#f4f3f4"}
+              thumbColor={Status11_1 ? "#f5dd4b" : "#f4f3f4"}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSwitch1}
-              value={isEnabled1}
+              value={Status11_1}
             />
+
           </View>
           </View>
       </TouchableHighlight>
