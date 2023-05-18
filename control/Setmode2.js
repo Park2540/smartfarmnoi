@@ -7,10 +7,10 @@ import { sendValueToFirebase2, database } from '../firebase/firbase';
 import {getDatabase,ref,set,update,onValue,remove,child,get} from "firebase/database";
 
 export default function Setmode2({ route, navigation }){
-// 	const [isEnabled, setIsEnabled] = useState(false);
+	const [isEnabled, setIsEnabled] = useState(false);
 //   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
-//   const [isEnabled1, setIsEnabled1] = useState(false);
+  const [isEnabled1, setIsEnabled1] = useState(false);
 //   const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
 
 
@@ -26,7 +26,7 @@ const toggleSwitch = () => {
   setIsEnabled((previousState) => {
     setIsEnabled1(false);
     setMode(previousState ? "Normal mode" : "Time mode");
-    update(child(dbRef, `Node2/Zone1${username}`), { Mode: previousState ? "Normal mode" : "Time mode" });
+    update(child(dbRef, `Node1/Zone2${username}`), { Mode: previousState ? "Normal mode" : "Time mode" });
     return !previousState;
   });
 };
@@ -35,7 +35,7 @@ const toggleSwitch1 = () => {
   setIsEnabled1((previousState) => {
     setIsEnabled(false);
     setMode(previousState ? "Normal mode" : "Sensor mode");
-    update(child(dbRef, `Node2/Zone1${username}`), { Mode: previousState ? "Normal mode" : "Sensor mode" });
+    update(child(dbRef, `Node1/Zone2${username}`), { Mode: previousState ? "Normal mode" : "Sensor mode" });
     return !previousState;
   });
 };
@@ -99,7 +99,7 @@ const toggleSwitch1 = () => {
             <View style={{marginTop:10,}}>
                 <Text> {'\n'}</Text>
             </View>
-            <TouchableHighlight  style={[styles.items3,]}
+            {/* <TouchableHighlight  style={[styles.items3,]}
 				underlayColor='#00BE00'
 				onPress={
                     () => navigation.navigate('Sensormode2')}
@@ -117,7 +117,7 @@ const toggleSwitch1 = () => {
 					<Image source={require('../src/soil-analysis.png')} style={styles.img} />
 					<Text style={styles.buttonText3}>โหมดเซ็นเซอร์</Text>
 				</View>
-			</TouchableHighlight>
+			</TouchableHighlight> */}
 			
 
             

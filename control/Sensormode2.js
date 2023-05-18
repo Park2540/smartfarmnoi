@@ -75,13 +75,13 @@ export default function Sensormode2({ route, navigation }){
             <TouchableHighlight  style={ SettingStyles.items3}>
 				<View >
 				<View style={ SettingStyles.container1}>
-      					<Switch
+      					{/* <Switch
         					trackColor={{ false: "#767577", true: "#00BE00" }}
         					thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
         					ios_backgroundColor="#3e3e3e"
         					onValueChange={toggleSwitch}
         					value={isEnabled}
-      					/>
+      					/> */}
     				</View>
                     <View>
                         <Image source={require('../src/soil-analysis.png')} style={ SettingStyles.img}/>
@@ -111,13 +111,13 @@ export default function Sensormode2({ route, navigation }){
 						
     				</SafeAreaView>
                     <View style={SettingStyles.container2}>
-                    <Switch
+                    {/* <Switch
                         trackColor={{ false: "#767577", true: "#00BE00" }}
                         thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
                         ios_backgroundColor="#3e3e3e"
                         onValueChange={toggleSwitch}
                         value={isEnabled}
-                    />
+                    /> */}
                 </View>
 					
 				</View>

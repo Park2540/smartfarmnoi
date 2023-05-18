@@ -1,136 +1,129 @@
-import React, { useState,useEffect } from "react";
-// import React, { useEffect } from 'react';
+import React, { useState } from "react";
 import { View, StyleSheet, Alert, Text, Image,Switch,TouchableHighlight, TouchableOpacity } from 'react-native'
 import { color } from 'react-native-reanimated'
 import { ImageBackground } from 'react-native';
 import globalStyles from '../global-styles'
-import { sendValueToFirebase, database } from '../firebase/firbase';
+import { sendValueToFirebase1, database } from '../firebase/firbase';
 import {getDatabase,ref,set,update,onValue,remove,child,get} from "firebase/database";
 
 export default function Setmode1({ route, navigation }){
-	const [Time_m1, setIsEnabled] = useState();
+	const [isEnabled, setIsEnabled] = useState(false);
+//   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+  const [isEnabled1, setIsEnabled1] = useState(false);
+//   const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
+
+
+  const dbRef = ref(getDatabase());
+  const database = getDatabase();
+  const [username, setName] = useState("");
+//   const [email, setEmail] = useState("");
+  const [mode1, setTest1] = useState("");
+
+  const [mode, setMode] = useState("");
 
 const toggleSwitch = () => {
   setIsEnabled((previousState) => {
     setIsEnabled1(false);
-    setTest1("Time mode");
-    update(child(dbRef, `Node1/Zone1${username}`), { Time_m1: !previousState }); // เปลี่ยนค่า Time_m1 ในฐานข้อมูล
+    setMode(previousState ? "Normal mode" : "Time mode");
+    update(child(dbRef, `Node1/Zone1${username}`), { Mode: previousState ? "Normal mode" : "Time mode" });
     return !previousState;
   });
 };
 
-const [Sensor_m1, setIsEnabled1] = useState(false);
 const toggleSwitch1 = () => {
   setIsEnabled1((previousState) => {
     setIsEnabled(false);
-    setTest1("Sensor mode");
-    update(child(dbRef, `Node1/Zone1${username}`), { Sensor_m1: !previousState }); // เปลี่ยนค่า Sensor_m1  ในฐานข้อมูล
+    setMode(previousState ? "Normal mode" : "Sensor mode");
+    update(child(dbRef, `Node1/Zone1${username}`), { Mode: previousState ? "Normal mode" : "Sensor mode" });
     return !previousState;
   });
 };
 
-const dbRef = ref(getDatabase());
-const [username, setName] = useState("");
-const [email, setEmail] = useState("");
-const [mode, setTest1] = useState("Normal mode");
-
-useEffect(() => {
-  const intervalId = setInterval(() => {
+  setInterval(() => {
     get(child(dbRef, `Node1/Zone1${username}`))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          var test = snapshot.val();
-          if (Time_m1) {
-            setIsEnabled1(false);
-            setTest1("Time mode");
-          } else if (Sensor_m1) {
-            setIsEnabled(false);
-            setTest1("Sensor mode");
-          } else {
-            setTest1("Normal mode");
-          }
-        }
-      })
-      .catch((error) => {});
-  }, 100);
+  .then((snapshot) => {
+    if (snapshot.exists()) {
+    //    console.log(snapshot.val());
+      var test = snapshot.val();
+      setTest1(test["Mode"]);
 
-  // Reset mode to "Normal mode" when both isEnabled and isEnabled1 are false
-  if (!Time_m1 && !Sensor_m1) {
-    setTest1("Normal mode");
-  }
+    }
+    else {
+    //   console.log("No data available");
+    }
+  })
+  .catch((error) => {
+    //console.error(error);
+  })
 
-  return () => clearInterval(intervalId);
-}, [Time_m1, Sensor_m1, username]);
-
+}, 100);
   
-return(
-	<ImageBackground
-  source={require("../assets/background50.png")}
-  style={styles.background}
->
-  <View style={globalStyles.container}>
-    <TouchableHighlight style={[styles.items]}>
-      <View style={styles.viewImgTextContainer}>
-        <Text style={styles.buttonText}>{mode}</Text>
-      </View>
-    </TouchableHighlight>
-    <TouchableHighlight
-      style={[styles.items3]}
-      underlayColor="#00BE00"
-      onPress={() => navigation.navigate("Timemode1")}
-    >
-      <View>
-        <View style={styles.container1}>
-          <Switch
-            trackColor={{ false: "#767577", true: "#00BE00" }}
-            thumbColor={Time_m1 ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={Time_m1}
-          />
+  
+    return (
+        <ImageBackground
+      		source={require('../assets/background50.png')}
+      		style={styles.background}
+    	>
+        <View style={globalStyles.container}>
+           
+           <TouchableHighlight style={[styles.items]}>
+				<View style={styles.viewImgTextContainer}>
+					<Text style={styles.buttonText}>{mode1}</Text>
+				</View>
+			</TouchableHighlight>
+            <TouchableHighlight  style={[styles.items3,]}
+				underlayColor='#00BE00'
+				onPress={
+                    () => navigation.navigate('Timemode1')}
+			>
+				
+				<View >
+                <View style={styles.container1}>
+      					<Switch
+        					trackColor={{ false: "#767577", true: "#00BE00" }}
+        					thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+        					ios_backgroundColor="#3e3e3e"
+        					onValueChange={toggleSwitch}
+        					value={isEnabled}
+      					/>
+    				</View>
+                    <View>
+                        <Image source={require('../src/alarm-clock.png')} style={styles.img} />
+                    </View>
+            	
+					<Text style={styles.buttonText3}>โหมดตั้งเวลา</Text>
+				</View>
+                
+			</TouchableHighlight>
+            <View style={{marginTop:10,}}>
+                <Text> {'\n'}</Text>
+            </View>
+            <TouchableHighlight  style={[styles.items3,]}
+				underlayColor='#00BE00'
+				onPress={
+                    () => navigation.navigate('Sensormode1')}
+			>
+				<View >
+					<View style={styles.container1}>
+      					<Switch
+        					trackColor={{ false: "#767577", true: "#00BE00" }}
+        					thumbColor={isEnabled1 ? "#f5dd4b" : "#f4f3f4"}
+        					ios_backgroundColor="#3e3e3e"
+        					onValueChange={toggleSwitch1}
+        					value={isEnabled1}
+      					/>
+    				</View>
+					<Image source={require('../src/soil-analysis.png')} style={styles.img} />
+					<Text style={styles.buttonText3}>โหมดเซ็นเซอร์</Text>
+				</View>
+			</TouchableHighlight>
+			
+
+            
         </View>
-
-        <View>
-          <Image
-            source={require("../src/alarm-clock.png")}
-            style={styles.img}
-          />
-        </View>
-        <Text style={styles.buttonText3}>โหมดตั้งเวลา</Text>
-      </View>
-    </TouchableHighlight>
-    {/* ส่วนโหมดเซ็นเซอร์ */}
-    <View style={[styles.items3]}>
-      <TouchableHighlight
-        underlayColor="#00BE00"
-        onPress={() => navigation.navigate("Sensormode1")}
-      >
-        <View>
-          <View style={styles.container1}>
-            <Switch
-              trackColor={{ false: "#767577", true: "#00BE00" }}
-              thumbColor={Sensor_m1 ? "#f5dd4b" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch1}
-              value={Sensor_m1}
-            />
-          </View>
-          
-          <Image
-            source={require("../src/soil-analysis.png")}
-            style={styles.img}
-          />
-          <Text style={styles.buttonText3}>โหมดเซ็นเซอร์</Text>
-        </View>
-      </TouchableHighlight>
-    </View>
-    {/* ส่วนอื่นๆ จะเขียนเช่นเดียวกัน */}
-  </View>
-</ImageBackground>
-
-
-);
-
+        </ImageBackground>
+    )
 }
 
 const styles = StyleSheet.create({

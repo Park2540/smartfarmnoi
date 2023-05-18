@@ -40,8 +40,7 @@ export default function App() {
 	// 	const requestUserPermission = async () => {
 	// 	  const authStatus = await messaging().requestPermission();
 	// 	  const enabled =
-	// 		authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-	// 		authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+	// 		authStatus === messaging.AuthorizationStatus.AUTHORIZED;
 	  
 	// 	  if (enabled) {
 	// 		console.log('Authorization status:', authStatus);
@@ -49,13 +48,18 @@ export default function App() {
 	// 	};
 	  
 	// 	const unsubscribe = messaging().onMessage(async remoteMessage => {
-	// 	  Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+	// 	  Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage), [
+	// 		{ text: 'OK', onPress: () => console.log('OK Pressed') },
+	// 	  ]);
 	// 	});
 	  
 	// 	requestUserPermission();
 	  
-	// 	return unsubscribe;
+	// 	return () => {
+	// 	  unsubscribe();
+	// 	};
 	//   }, []);
+	  
 	  
   const MainControl = () => {
 		const Control = createStackNavigator()

@@ -38,8 +38,8 @@ const sendValueToFirebase1 = async (value) => {
 };
 const sendValueToFirebase2 = async (value) => {
   try {
-    await set(ref(database, '/Node2/Zone1/Valve'), value);
-    console.log('Value sent to Firebase');
+    await set(ref(database, '/Node1/Zone3/Valve'), value);
+    // console.log('Value sent to Firebase');
   } catch (error) {
     console.error('Error sending value to Firebase: ', error);
     throw error;

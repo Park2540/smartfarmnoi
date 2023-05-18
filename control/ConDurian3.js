@@ -125,7 +125,7 @@ const onRefresh = () => {
 		   <TouchableHighlight style={[styles.items,]}
 			   underlayColor='#00BE00'
 			   onPress={
-				   () => navigation.navigate('Setmode1')}
+				   () => navigation.navigate('Setmode3')}
 		   >
 			   
 			   <View style={styles.viewImgTextContainer}>
@@ -134,23 +134,24 @@ const onRefresh = () => {
 		   </TouchableHighlight>
 
 		   <TouchableHighlight
-  style={[styles.button, { backgroundColor: `${bgColor}` }]}
-  onPress={async () => {
-    try {
-      const value = isTorchOn ? 'Zone_1_OFF' : 'Zone_1_ON';
-      await sendValueToFirebase2(value);
-      setBgColor(isTorchOn ? '#cc0033' : '#00cc33');
-      setIsTorchOn(!isTorchOn);
-    } catch (error) {
-      console.error('Error sending value to Firebase: ', error);
-    }
-  }}
->
+				style={[styles.button, { backgroundColor: `${bgColor}` }]}
+				onPress={async () => {
+					try {
+					const value = isTorchOn ? 'Zone_3_OFF' : 'Zone_3_ON';
+					await sendValueToFirebase2(value);
+					setBgColor(isTorchOn ? '#cc0033' : '#00cc33');
+					setIsTorchOn(!isTorchOn);
+					} catch (error) {
+					console.error('Error sending value to Firebase: ', error);
+					}
+				}}
+				>
 
-  <View>
-    <Text style={styles.buttonText1}>{isTorchOn ? 'เปิด' : 'ปิด'}</Text>
-  </View>
-</TouchableHighlight>
+			<View>
+				
+				<Text style={styles.buttonText1}>{isTorchOn ? 'เปิด' : 'ปิด'}</Text>
+			</View>
+			</TouchableHighlight>
 
 
 		   <View style={{marginTop:10}}>
@@ -158,9 +159,9 @@ const onRefresh = () => {
 					   {(isTorchOn) ? 'สถานะเปิดการทำงาน' : 'สถานะปิดการทำงาน'}
 			   </Text>
 		   </View>
-		   <View style={{marginTop:10}}>
+		   {/* <View style={{marginTop:10}}>
 			   <Text></Text>
-		   </View>
+		   </View> */}
 		   <TouchableHighlight style={[styles.items3,]}>
 			   <View style={styles.viewImgTextContainer}>
 				   <Image source={require('../src/soil-analysis.png')} style={styles.img} />

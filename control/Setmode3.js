@@ -3,25 +3,45 @@ import { View, StyleSheet, Alert, Text, Image,Switch,TouchableHighlight, Touchab
 import { color } from 'react-native-reanimated'
 import { ImageBackground } from 'react-native';
 import globalStyles from '../global-styles'
-import { sendValueToFirebase, database } from '../firebase/firbase';
+import { sendValueToFirebase3, database } from '../firebase/firbase';
 import {getDatabase,ref,set,update,onValue,remove,child,get} from "firebase/database";
 
 export default function Setmode3({ route, navigation }){
 	const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+//   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   const [isEnabled1, setIsEnabled1] = useState(false);
-  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
+//   const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
 
 
   const dbRef = ref(getDatabase());
   const database = getDatabase();
   const [username, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [mode, setTest1] = useState("");
+//   const [email, setEmail] = useState("");
+  const [mode1, setTest1] = useState("");
+
+  const [mode, setMode] = useState("");
+
+const toggleSwitch = () => {
+  setIsEnabled((previousState) => {
+    setIsEnabled1(false);
+    setMode(previousState ? "Normal mode" : "Time mode");
+    update(child(dbRef, `Node1/Zone3${username}`), { Mode: previousState ? "Normal mode" : "Time mode" });
+    return !previousState;
+  });
+};
+
+const toggleSwitch1 = () => {
+  setIsEnabled1((previousState) => {
+    setIsEnabled(false);
+    setMode(previousState ? "Normal mode" : "Sensor mode");
+    update(child(dbRef, `Node1/Zone3${username}`), { Mode: previousState ? "Normal mode" : "Sensor mode" });
+    return !previousState;
+  });
+};
 
   setInterval(() => {
-    get(child(dbRef, `Node1/Zone1${username}`))
+    get(child(dbRef, `Node1/Zone3${username}`))
   .then((snapshot) => {
     if (snapshot.exists()) {
     //    console.log(snapshot.val());
@@ -49,13 +69,13 @@ export default function Setmode3({ route, navigation }){
            
            <TouchableHighlight style={[styles.items]}>
 				<View style={styles.viewImgTextContainer}>
-					<Text style={styles.buttonText}>{mode}</Text>
+					<Text style={styles.buttonText}>{mode1}</Text>
 				</View>
 			</TouchableHighlight>
             <TouchableHighlight  style={[styles.items3,]}
 				underlayColor='#00BE00'
 				onPress={
-                    () => navigation.navigate('Timemode1')}
+                    () => navigation.navigate('Timemode3')}
 			>
 				
 				<View >
@@ -79,10 +99,10 @@ export default function Setmode3({ route, navigation }){
             <View style={{marginTop:10,}}>
                 <Text> {'\n'}</Text>
             </View>
-            <TouchableHighlight  style={[styles.items3,]}
+            {/* <TouchableHighlight  style={[styles.items3,]}
 				underlayColor='#00BE00'
 				onPress={
-                    () => navigation.navigate('Sensormode1')}
+                    () => navigation.navigate('Sensormode3')}
 			>
 				<View >
 					<View style={styles.container1}>
@@ -97,7 +117,7 @@ export default function Setmode3({ route, navigation }){
 					<Image source={require('../src/soil-analysis.png')} style={styles.img} />
 					<Text style={styles.buttonText3}>โหมดเซ็นเซอร์</Text>
 				</View>
-			</TouchableHighlight>
+			</TouchableHighlight> */}
 			
 
             
