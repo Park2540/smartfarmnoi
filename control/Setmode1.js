@@ -8,22 +8,23 @@ import { sendValueToFirebase, database } from '../firebase/firbase';
 import {getDatabase,ref,set,update,onValue,remove,child,get} from "firebase/database";
 
 export default function Setmode1({ route, navigation }){
-	const [isEnabled, setIsEnabled] = useState(false);
+	const [Time_m1, setIsEnabled] = useState();
+
 const toggleSwitch = () => {
   setIsEnabled((previousState) => {
     setIsEnabled1(false);
     setTest1("Time mode");
-    update(child(dbRef, `Node1/Zone1${username}`), { isEnabled: !previousState }); // เปลี่ยนค่า isEnabled ในฐานข้อมูล
+    update(child(dbRef, `Node1/Zone1${username}`), { Time_m1: !previousState }); // เปลี่ยนค่า Time_m1 ในฐานข้อมูล
     return !previousState;
   });
 };
 
-const [isEnabled1, setIsEnabled1] = useState(false);
+const [Sensor_m1, setIsEnabled1] = useState(false);
 const toggleSwitch1 = () => {
   setIsEnabled1((previousState) => {
     setIsEnabled(false);
     setTest1("Sensor mode");
-    update(child(dbRef, `Node1/Zone1${username}`), { isEnabled1: !previousState }); // เปลี่ยนค่า isEnabled1 ในฐานข้อมูล
+    update(child(dbRef, `Node1/Zone1${username}`), { Sensor_m1: !previousState }); // เปลี่ยนค่า Sensor_m1  ในฐานข้อมูล
     return !previousState;
   });
 };
@@ -39,10 +40,10 @@ useEffect(() => {
       .then((snapshot) => {
         if (snapshot.exists()) {
           var test = snapshot.val();
-          if (isEnabled) {
+          if (Time_m1) {
             setIsEnabled1(false);
             setTest1("Time mode");
-          } else if (isEnabled1) {
+          } else if (Sensor_m1) {
             setIsEnabled(false);
             setTest1("Sensor mode");
           } else {
@@ -54,12 +55,12 @@ useEffect(() => {
   }, 100);
 
   // Reset mode to "Normal mode" when both isEnabled and isEnabled1 are false
-  if (!isEnabled && !isEnabled1) {
+  if (!Time_m1 && !Sensor_m1) {
     setTest1("Normal mode");
   }
 
   return () => clearInterval(intervalId);
-}, [isEnabled, isEnabled1, username]);
+}, [Time_m1, Sensor_m1, username]);
 
   
 return(
@@ -82,12 +83,13 @@ return(
         <View style={styles.container1}>
           <Switch
             trackColor={{ false: "#767577", true: "#00BE00" }}
-            thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+            thumbColor={Time_m1 ? "#f5dd4b" : "#f4f3f4"}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggleSwitch}
-            value={isEnabled}
+            value={Time_m1}
           />
         </View>
+
         <View>
           <Image
             source={require("../src/alarm-clock.png")}
@@ -107,12 +109,13 @@ return(
           <View style={styles.container1}>
             <Switch
               trackColor={{ false: "#767577", true: "#00BE00" }}
-              thumbColor={isEnabled1 ? "#f5dd4b" : "#f4f3f4"}
+              thumbColor={Sensor_m1 ? "#f5dd4b" : "#f4f3f4"}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSwitch1}
-              value={isEnabled1}
+              value={Sensor_m1}
             />
           </View>
+          
           <Image
             source={require("../src/soil-analysis.png")}
             style={styles.img}

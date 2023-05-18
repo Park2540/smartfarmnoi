@@ -5,7 +5,7 @@ import { ImageBackground } from 'react-native';
 import globalStyles from '../global-styles'
 import ConStyles from '../Con-Style'
 import axios from "axios";
-import { sendValueToFirebase, database } from '../firebase/firbase';
+import { sendValueToFirebase2, database } from '../firebase/firbase';
 // import firbase from '../firebase/firbase'
 import {getDatabase,ref,set,update,onValue,remove,child,get} from "firebase/database";
 // import database from '@react-native-firebase/database';
@@ -61,7 +61,7 @@ export default function ConDurian3({ route, navigation }){
 
 // ตรวจสอบค่าmode
 setInterval(() => {
-    get(child(dbRef, `Node1/Zone1${username}`))
+    get(child(dbRef, `Node1/Zone3${username}`))
   .then((snapshot) => {
     if (snapshot.exists()) {
     //    console.log(snapshot.val());
@@ -138,7 +138,7 @@ const onRefresh = () => {
   onPress={async () => {
     try {
       const value = isTorchOn ? 'Zone_1_OFF' : 'Zone_1_ON';
-      await sendValueToFirebase(value);
+      await sendValueToFirebase2(value);
       setBgColor(isTorchOn ? '#cc0033' : '#00cc33');
       setIsTorchOn(!isTorchOn);
     } catch (error) {

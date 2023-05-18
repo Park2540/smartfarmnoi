@@ -25,14 +25,65 @@ export default function Maincontrol({ navigation }) {
 
   const [isEnabled4, setIsEnabled4] = useState(false);
   const toggleSwitch4 = () => setIsEnabled4((previousState) => !previousState);
-
-
-  
-
-  
-
   	//dayjs.extend(LocalizedFormat);
     var date_str = dayjs('2000-01-01').format('h:mm:ss A');
+
+
+	const dbRef = ref(getDatabase());
+  const database = getDatabase();
+  const [username, setName] = useState("");
+  const [Status1, setStatus1] = useState("");
+  const [Status2, setStatus2] = useState("");
+  const [Status3, setStatus3] = useState("");
+  useEffect(() => {
+	const modeTimeRef1 = child(dbRef, `Node1/Zone1${username}`);
+	const unsubscribe1 = onValue(modeTimeRef1, (snapshot) => {
+	  if (snapshot.exists()) {
+		const data = snapshot.val();
+		setStatus1(data["Valve"]);
+	  } else {
+		console.log("No data available");
+	  }
+	}, (error) => {
+	  console.error(error);
+	},
+	
+	);
+	const modeTimeRef2 = child(dbRef, `Node1/Zone2${username}`);
+	const unsubscribe2 = onValue(modeTimeRef2, (snapshot) => {
+	  if (snapshot.exists()) {
+		const data = snapshot.val();
+		setStatus2(data["Valve"]);
+	  } else {
+		console.log("No data available");
+	  }
+	}, (error) => {
+	  console.error(error);
+	},
+	
+	);
+	const modeTimeRef3 = child(dbRef, `Node1/Zone3${username}`);
+	const unsubscribe3 = onValue(modeTimeRef3, (snapshot) => {
+	  if (snapshot.exists()) {
+		const data = snapshot.val();
+		setStatus3(data["Valve"]);
+	  } else {
+		console.log("No data available");
+	  }
+	}, (error) => {
+	  console.error(error);
+	},
+	
+	);
+	return () => {
+		// ยกเลิกการติดตามเมื่อคอมโพเนนต์ถูกทำลาย
+		off(modeTimeRef1, 'value', unsubscribe1);
+		off(modeTimeRef2, 'value', unsubscribe2);
+		off(modeTimeRef3, 'value', unsubscribe3);
+		// off(modeTimeRef3, 'value', unsubscribe3);
+	  };
+
+  },[]);
     return (
         <ImageBackground
       		source={require('../assets/background50.png')}
@@ -59,6 +110,9 @@ export default function Maincontrol({ navigation }) {
 				<View style={styles.viewImgTextContainer}>
 					<Text style={styles.buttonText}>ควบคุมการทำงานทุเรียนโซน 1</Text>
 					<View style={styles.container1}>
+						<Text style={{ color: Status1 === "Zone_1_OFF" ? "red" : "green" }}>
+      						{Status1 === "Zone_1_OFF" ? "ปิด" : "เปิด"}
+    					</Text>
       					{/* <Switch
         					trackColor={{ false: "#767577", true: "#00BE00" }}
         					thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
@@ -80,13 +134,16 @@ export default function Maincontrol({ navigation }) {
 					
 					<Text style={styles.buttonText}>ควบคุมการทำงานทุเรียนโซน 2</Text>
 					<View style={styles.container1}>
-      					<Switch
+					<Text style={{ color: Status2 === "Zone_2_OFF" ? "red" : "green" }}>
+      						{Status2 === "Zone_2_OFF" ? "ปิด" : "เปิด"}
+    					</Text>
+      					{/* <Switch
         					trackColor={{ false: "#767577", true: "#00BE00" }}
         					thumbColor={isEnabled1 ? "#f5dd4b" : "#f4f3f4"}
         					ios_backgroundColor="#3e3e3e"
         					onValueChange={toggleSwitch1}
         					value={isEnabled1}
-      					/>
+      					/> */}
     				</View>
 				</View>
 			</TouchableHighlight>
@@ -99,13 +156,16 @@ export default function Maincontrol({ navigation }) {
 				<View style={styles.viewImgTextContainer}>
 					<Text style={styles.buttonText}>ควบคุมการทำงานทุเรียนโซน 3</Text>
 					<View style={styles.container1}>
-      					<Switch
+						<Text style={{ color: Status3 === "Zone_3_OFF" ? "red" : "green" }}>
+      						{Status3 === "Zone_3_OFF" ? "ปิด" : "เปิด"}
+    					</Text>
+      					{/* <Switch
         					trackColor={{ false: "#767577", true: "#00BE00" }}
         					thumbColor={isEnabled2 ? "#f5dd4b" : "#f4f3f4"}
         					ios_backgroundColor="#3e3e3e"
         					onValueChange={toggleSwitch2}
         					value={isEnabled2}
-      					/>
+      					/> */}
     				</View>
 				</View>
 			</TouchableHighlight>

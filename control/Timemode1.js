@@ -13,12 +13,14 @@ import dayjs from "dayjs";
 import { ImageBackground } from 'react-native';
 import globalStyles from "../global-styles";
 import SettingStyles from "../Setting-Styles";
-import DateTimePicker from '@react-native-community/datetimepicker';
+// import DateTimePicker from '@react-native-community/datetimepicker';
 // import { fonts } from "react-native-elements/dist/config";
 import { sendValueToFirebase, } from '../firebase/firbase';
 
 export default function Timemode1({ route, navigation }) {
 
+
+  var date_str = dayjs('2000-01-01').format('h:mm:ss A');
   //การทำงานของสวิช
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
@@ -115,13 +117,11 @@ const modeTimeRef2 = child(dbRef, `Node1/Zone1/ModeTime/2${username}`);
 
   return () => {
     // ยกเลิกการติดตามเมื่อคอมโพเนนต์ถูกทำลาย
-    off(modeTimeRef1, 'value', unsubscribe1);
-    off(modeTimeRef2, 'value', unsubscribe2);
-    off(modeTimeRef3, 'value', unsubscribe3);
+    off1(modeTimeRef1, 'value', unsubscribe1);
+    off2(modeTimeRef2, 'value', unsubscribe2);
+    off3(modeTimeRef3, 'value', unsubscribe3);
   };
 }, []);
-
-
   // function onChangeTime2(event, selectedTime) {
   //   const currentTime = selectedTime || Time2;
   //   setShowModal(Platform.OS === 'ios');
@@ -152,6 +152,7 @@ const modeTimeRef2 = child(dbRef, `Node1/Zone1/ModeTime/2${username}`);
       alert(error);
     });
   }
+  
   const [showModaltime2, setShowModaltime2] = useState(false);
   const [Time11_3, setTime3] = useState('');
   const [Time11_4, setTime4] = useState('');
@@ -241,18 +242,18 @@ const TimePicker = () => {
       					<Text style={ SettingStyles.t}>เวลาปิด</Text>
     				</SafeAreaView>
             <View style={SettingStyles.container2}>
-            <Switch
+            {/* <Switch
               trackColor={{ false: "#767577", true: "#00BE00" }}
               thumbColor={Status11_1 ? "#f5dd4b" : "#f4f3f4"}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSwitch1}
               value={Status11_1}
-            />
+            /> */}
 
           </View>
           </View>
       </TouchableHighlight>
-      <TouchableHighlight
+      {/* <TouchableHighlight
           underlayColor='#00BE00'
           onPress={() => setShowModaltime2(true)}
       style={SettingStyles.itemsBtime}>
@@ -278,7 +279,8 @@ const TimePicker = () => {
             />
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableHighlight> */}
+      
     </ScrollView>
 
     <View style={styles.main}>
@@ -310,35 +312,36 @@ const TimePicker = () => {
                 keyboardType="numeric"
               />
             </View>
-            <View>
-            <Text style={styles.text}>วันที่</Text>
-            <DropDownPicker
-              items={[
-                {label: 'Mo', value: 'Mo'},
-                {label: 'Tu', value: 'Tu'},
-                {label: 'We', value: 'We'},
-                {label: 'Th', value: 'Th'},
-                {label: 'Fr', value: 'Tu'},
-                {label: 'Sa', value: 'Sa'},
-                {label: 'Su', value: 'Su'},
-                // เพิ่มเองตามต้องการ
-              ]}
-              defaultValue={Day11_1}
-              containerStyle={{height: 40}}
-              style={{
-                borderWidth: 1,
-                padding: 10,
-                borderRadius: 15,
-                color: '#000066',
-                backgroundColor: '#AED6F1', // เปลี่ยนสีพื้นหลังของ DropDownPicker
-              }}
-              itemStyle={{
-                justifyContent: 'flex-start',
-              }}
-              dropDownStyle={{backgroundColor: '#AED6F1'}}
-              onChangeItem={(item) => selectedDay11_1(item.value)}
-            />
-    </View>
+            {/* <View>
+              <Text style={styles.text}>วันที่</Text>
+              <DropDownPicker
+                items={[
+                  {label: 'Mo', value: 'Mo'},
+                  {label: 'Tu', value: 'Tu'},
+                  {label: 'We', value: 'We'},
+                  {label: 'Th', value: 'Th'},
+                  {label: 'Fr', value: 'Tu'},
+                  {label: 'Sa', value: 'Sa'},
+                  {label: 'Su', value: 'Su'},
+                  // เพิ่มเองตามต้องการ
+                ]}
+                selectedValue={Day11_1} // เปลี่ยน defaultValue เป็น selectedValue
+                containerStyle={{height: 40}}
+                style={{
+                  borderWidth: 1,
+                  padding: 10,
+                  borderRadius: 15,
+                  color: '#000066',
+                  backgroundColor: '#AED6F1', // เปลี่ยนสีพื้นหลังของ DropDownPicker
+                }}
+                itemStyle={{
+                  justifyContent: 'flex-start',
+                }}
+                dropDownStyle={{backgroundColor: '#AED6F1'}}
+                onChangeItem={(item) => selectedDay11_1(item.value)}
+              />
+            </View> */}
+
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[styles.button, styles.cancelButton]}
@@ -388,7 +391,7 @@ const TimePicker = () => {
                 keyboardType="numeric"
               />
             </View>
-            <View>
+            {/* <View>
             <Text style={styles.text}>วันที่</Text>
             <DropDownPicker
               items={[
@@ -416,7 +419,7 @@ const TimePicker = () => {
               dropDownStyle={{backgroundColor: '#AED6F1'}}
               onChangeItem={(item) => selectedDay11_2(item.value)}
             />
-    </View>
+    </View> */}
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[styles.button, styles.cancelButton]}

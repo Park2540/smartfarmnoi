@@ -24,6 +24,7 @@ export default function ConDurian1({ route, navigation }){
   const database = getDatabase();
   const [username, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [status, setStatus] = useState("");
   const [test1, setTest1] = useState("");
   const [test2, setTest2] = useState("");
   const [test3, setTest3] = useState("");
@@ -40,14 +41,33 @@ export default function ConDurian1({ route, navigation }){
 useEffect(() => {
 	const fetchData = async () => {
 	  try {
-		const snapshot = await get(child(dbRef, `Node1/Sensor${username}`));
-		if (snapshot.exists()) {
-		  const test = snapshot.val();
-		  setTest1(test["AirTemperature"]);
-		  setTest2(test["Humidity"]);
-		  setTest3(test["Light"]);
-		  setTest4(test["Moisture"]);
-		  setTest5(test["SoilTemperature"]);
+		const snapshotSensor = await get(child(dbRef, `Node1/Sensor${username}`));
+		const snapshotMode = await get(child(dbRef, `Node1/Zone1${username}`));
+		const snapshotValve = await get(child(dbRef, `Node1/Valve${username}`));
+  
+		if (snapshotSensor.exists()) {
+		  const sensorData = snapshotSensor.val();
+		  setTest1(sensorData["AirTemperature"]);
+		  setTest2(sensorData["Humidity"]);
+		  setTest3(sensorData["Light"]);
+		  setTest4(sensorData["Moisture"]);
+		  setTest5(sensorData["SoilTemperature"]);
+		}
+  
+		if (snapshotMode.exists()) {
+		  const modeData = snapshotMode.val();
+		  setMode1(modeData["Mode"]);
+		}
+
+		if (snapshotValve.exists()) {
+		  const valveData = snapshotValve.val();
+		  setValve(valveData["Valve"]);
+		  // ตรวจสอบสถานะและอัปเดตสถานะที่ถูกแสดงผล
+		  if (valveData["Valve"] === "Zone_1_OFF") {
+			setStatus("Zone_1_OFF");
+		  } else if (valveData["Valve"] === "Zone_1_ON") {
+			setStatus("Zone_1_ON");
+		  }
 		}
 	  } catch (error) {
 		console.error(error);
@@ -59,43 +79,6 @@ useEffect(() => {
 	return () => clearInterval(interval);
   }, []);
   
-  // ตรวจสอบค่า mode
-  useEffect(() => {
-	const fetchMode = async () => {
-	  try {
-		const snapshot = await get(child(dbRef, `Node1/Zone1${username}`));
-		if (snapshot.exists()) {
-		  const test = snapshot.val();
-		  setMode1(test["Mode"]);
-		}
-	  } catch (error) {
-		console.error(error);
-	  }
-	};
-  
-	const interval = setInterval(fetchMode, 10);
-  
-	return () => clearInterval(interval);
-  }, []);
-  
-  // ตรวจสอบสถานะการทำงาน
-  useEffect(() => {
-	const fetchValve = async () => {
-	  try {
-		const snapshot = await get(child(dbRef, `Node1/Valve${username}`));
-		if (snapshot.exists()) {
-		  const test = snapshot.val();
-		  setValve(test["Valve"]);
-		}
-	  } catch (error) {
-		console.error(error);
-	  }
-	};
-  
-	const interval = setInterval(fetchValve, 10);
-  
-	return () => clearInterval(interval);
-  }, []);
   
 // function readData() {
 //     const starCountRef = ref(db, "users/" + username);
@@ -133,29 +116,34 @@ useEffect(() => {
 		   </TouchableHighlight>
 
 		   <TouchableHighlight
-  style={[styles.button, { backgroundColor: `${bgColor}` }]}
-  onPress={async () => {
-    try {
-      const value = isTorchOn ? 'Zone_1_OFF' : 'Zone_1_ON';
-      await sendValueToFirebase(value);
-      setBgColor(isTorchOn ? '#cc0033' : '#00cc33');
-      setIsTorchOn(!isTorchOn);
-    } catch (error) {
-      console.error('Error sending value to Firebase: ', error);
-    }
-  }}
->
+				style={[styles.button, { backgroundColor: `${bgColor}` }]}
+				onPress={async () => {
+					try {
+					const value = isTorchOn ? 'Zone_1_OFF' : 'Zone_1_ON';
+					await sendValueToFirebase(value);
+					setBgColor(isTorchOn ? '#cc0033' : '#00cc33');
+					setIsTorchOn(!isTorchOn);
+					} catch (error) {
+					console.error('Error sending value to Firebase: ', error);
+					}
+				}}
+				>
 
-  <View>
-    <Text style={styles.buttonText1}>{isTorchOn ? 'เปิด' : 'ปิด'}</Text>
-  </View>
-</TouchableHighlight>
+			<View>
+				
+				<Text style={styles.buttonText1}>{isTorchOn ? 'เปิด' : 'ปิด'}</Text>
+			</View>
+			</TouchableHighlight>
 
 
 		   <View style={{marginTop:10}}>
-			   <Text style={styles.buttonText2}>
+		   {/* <Text style={{ fontSize: 25, color: status === "Zone_1_OFF" ? "red" : "green" }}>
+  				{status === "Zone_1_OFF" ? "สถานะปิดการทำงาน" : "สถานะเปิดการทำงาน"}
+			</Text> */}
+			<Text style={styles.buttonText2}>
 					   {(isTorchOn) ? 'สถานะเปิดการทำงาน' : 'สถานะปิดการทำงาน'}
 			   </Text>
+			
 		   </View>
 		   <View style={{marginTop:10}}>
 			   <Text></Text>
