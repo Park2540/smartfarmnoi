@@ -30,9 +30,9 @@ import SetDurian1 from './setting/SetDurian1'
 import SetDurian2 from './setting/setDurian2'
 import SetDurian3 from './setting/setDurian3'
 
-import {PermissionsAndroid,Alert} from 'react-native';
-PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-import messaging from '@react-native-firebase/messaging';
+// import {PermissionsAndroid,Alert} from 'react-native';
+// PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+// import messaging from '@react-native-firebase/messaging';
 
 export default function App() {
 
